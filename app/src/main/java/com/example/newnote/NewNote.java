@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class NewNote extends AppCompatActivity {
 
@@ -35,6 +36,20 @@ public class NewNote extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextInputEditText title = findViewById(R.id.title);
+                TextInputEditText subTitle = findViewById(R.id.subTitle);
+                TextInputEditText body = findViewById(R.id.body);
+
+                String a = title.getText().toString();
+                String b = subTitle.getText().toString();
+                String c = body.getText().toString();
+                String d = "color";
+                int e = 0;
+
+                DatabaseHandler db = new DatabaseHandler(NewNote.this,null,null,1);
+                db.newNote(a, b, c, d,e);
+
+
 
                 Intent i = new Intent(NewNote.this, MainActivity.class);
                 startActivity(i);
