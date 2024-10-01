@@ -80,26 +80,23 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="166dp"
-        android:layout_height="69dp"
-        android:layout_marginBottom="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
         android:text="Done"
         android:textColorLink="@color/secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton4"
+    <ImageButton
+        android:id="@+id/imageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/primary"
-        android:clickable="true"
-        app:backgroundTint="@color/primary"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/baseline_palette_24" />
