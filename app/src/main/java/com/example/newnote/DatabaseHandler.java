@@ -13,7 +13,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE HOMIES_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, LEVEL INTEGER );";
+        String createTableStatement = "CREATE TABLE HOMIES_TABLE (ID INTEGER PRIMARY KEY AUTOINCREMENT, );";
         db.execSQL(createTableStatement);
     }
 
