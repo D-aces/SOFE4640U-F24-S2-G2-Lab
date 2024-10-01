@@ -32,6 +32,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start"
@@ -53,6 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="top"
@@ -72,6 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/subTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Subtitle"
@@ -79,7 +82,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/donebutton"
         android:layout_width="166dp"
         android:layout_height="69dp"
         android:layout_marginBottom="44dp"

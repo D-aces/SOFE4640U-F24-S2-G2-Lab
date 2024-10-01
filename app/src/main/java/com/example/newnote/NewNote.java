@@ -31,10 +31,11 @@ public class NewNote extends AppCompatActivity {
             }
         });
 
-        Button done = findViewById(R.id.button2);
+        Button done = findViewById(R.id.donebutton);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(NewNote.this, MainActivity.class);
                 startActivity(i);
             }
