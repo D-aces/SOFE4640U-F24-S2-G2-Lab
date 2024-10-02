@@ -82,7 +82,7 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="120dp"
         android:text="Done"
         android:textColorLink="@color/secondary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -101,4 +101,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/baseline_palette_24" />
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="145dp"
+        tools:layout_editor_absoluteY="401dp">
+
+        <RadioButton
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_rounded"
+            android:backgroundTint="@color/option_4"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="683dp" />
+
+        <RadioButton
+            android:id="@+id/radioGroup2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="20dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_rounded"
+            android:backgroundTint="@color/option_2"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup3"
+            tools:layout_editor_absoluteY="683dp" />
+
+        <RadioButton
+            android:id="@+id/radioGroup"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_rounded"
+            android:backgroundTint="@color/option_3"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup2"
+            tools:layout_editor_absoluteY="683dp" />
+
+        <RadioButton
+            android:id="@+id/radioGroup3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="20dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_rounded"
+            android:backgroundTint="@color/option_1"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup4"
+            tools:layout_editor_absoluteY="683dp" />
+
+        <RadioButton
+            android:id="@+id/radioGroup4"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:layout_marginEnd="96dp"
+            android:background="@drawable/bg_rounded"
+            android:backgroundTint="@color/option_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="683dp" />
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>
