@@ -1,10 +1,12 @@
 package com.example.newnote;
 
+import android.R.color;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +40,16 @@ public class NewNote extends AppCompatActivity {
                 Intent i = new Intent(NewNote.this, MainActivity.class);
                 startActivity(i);
             }
+        });
+
+        ImageButton colourPalette = findViewById(R.id.colourPalette);
+        colourPalette.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                BottomSheetDialogue colourOptions = new BottomSheetDialogue();
+                colourOptions.show(getSupportFragmentManager(),"ModalBottomSheet");
+            }
+
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
