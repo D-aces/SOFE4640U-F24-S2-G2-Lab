@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewNote</string>
+    <string name="radio_button">Radio Button</string>
 </resources>

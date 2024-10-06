@@ -2,20 +2,19 @@ package com.example.newnote;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class NewNote extends AppCompatActivity {
+public class NewNote extends AppCompatActivity implements ColourSelectionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +23,19 @@ public class NewNote extends AppCompatActivity {
         setContentView(R.layout.activity_new_note);
 
         ImageButton b = findViewById(R.id.newnoteback);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(NewNote.this, MainActivity.class);
-                startActivity(i);
-            }
+        b.setOnClickListener(v -> {
+            Intent i = new Intent(NewNote.this, MainActivity.class);
+            startActivity(i);
         });
 
+        ImageButton colourPalette = findViewById(R.id.colourPalette);
+
+        BottomSheetDialogue colourOptions = new BottomSheetDialogue();
+        colourPalette.setOnClickListener(view -> {
+            if (!colourOptions.isAdded()) {
+                colourOptions.setColourSelectionListener(NewNote.this);
+                colourOptions.show(getSupportFragmentManager(), "ModalBottomSheet");
+              
         Button done = findViewById(R.id.donebutton);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,5 +65,10 @@ public class NewNote extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    public void onColourSelected(int color) {
+        String noteColour = Integer.toHexString(color);
+        System.out.println("The colour is" + noteColour);
     }
 }
