@@ -15,7 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableStatement = "CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, subtitle TEXT, body TEXT, created INTEGER);";
+        String createTableStatement = "CREATE TABLE notes (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, subtitle TEXT, body TEXT, colour TEXT, created INTEGER);";
         db.execSQL(createTableStatement);
     }
 
@@ -25,12 +25,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Add a note
-    public boolean newNote(int id, String title, String subtitle, String body, int created){
+    public boolean newNote(String title, String subtitle, String body, String colour, int created){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("title",title);
         values.put("subtitle", subtitle);
         values.put("body", body);
+        values.put("colour", colour);
         values.put("created", created);
         long result = db.insert("notes",null, values);
         db.close();
@@ -44,6 +45,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
+    // Search notes
+    public Cursor searchNotes(String filter){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM notes WHERE title LIKE ?";
+        String[] selectionArgs = new String[]{"%" + filter + "%"};
+        return db.rawQuery(query, selectionArgs);
+    }
 
 
 

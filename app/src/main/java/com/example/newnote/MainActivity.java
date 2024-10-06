@@ -1,6 +1,7 @@
 package com.example.newnote;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
@@ -8,10 +9,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
+
+    private DatabaseHandler dbHandler;
+    private RecyclerView listNotes;
+    private NoteAdapter notesAdapter;
+    private List<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +31,17 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        // Initialize the DatabaseHandler and RecyclerView
+        dbHandler = new DatabaseHandler(this, null, null, 1);
+        listNotes = findViewById(R.id.notes);
+
+        // Set up RecyclerView
+        listNotes.setLayoutManager(new LinearLayoutManager(this));
+        noteList = getAllNotesFromDB();
+        notesAdapter = new NoteAdapter(noteList);
+        listNotes.setAdapter(notesAdapter);
+
+        // Set up Floating Action Button to add a new note
         FloatingActionButton b = findViewById(R.id.floatingActionButton2);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -37,5 +61,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Method to get all notes from the database
+    private List<Note> getAllNotesFromDB() {
+        List<Note> notes = new ArrayList<>();
+        Cursor cursor = dbHandler.getAllNotes();
 
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String title = cursor.getString(1);
+                String subtitle = cursor.getString(2);
+                String body = cursor.getString(3);
+                Date created = new Date (cursor.getInt(4));
+                notes.add(new Note(id, title, subtitle, body, created));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return notes;
+    }
 }
