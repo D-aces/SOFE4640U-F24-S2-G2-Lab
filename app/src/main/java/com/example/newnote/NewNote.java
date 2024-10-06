@@ -5,17 +5,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.google.android.material.textfield.TextInputEditText;
 
+
 public class NewNote extends AppCompatActivity implements ColourSelectionListener {
-    private String noteColour = "white";
+    private int colour = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: Add a text watcher to check if title is empty
                 TextInputEditText title = findViewById(R.id.title);
                 TextInputEditText subTitle = findViewById(R.id.subtitle);
                 TextInputEditText body = findViewById(R.id.body);
@@ -50,11 +51,10 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                 String titleText = title.getText().toString();
                 String subtitleText = subTitle.getText().toString();
                 String bodyText = body.getText().toString();
-                String colour = noteColour;
-                int e = 0;
+                long timeStamp = System.currentTimeMillis();
 
                 DatabaseHandler db = new DatabaseHandler(NewNote.this, null, null, 1);
-                db.newNote(titleText, subtitleText, bodyText, colour, e);
+                db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
 
                 Intent i = new Intent(NewNote.this, MainActivity.class);
                 startActivity(i);
@@ -67,7 +67,9 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
             return insets;
         });
     }
-    public void onColourSelected(int color) {
-        noteColour = Integer.toHexString(color);
+    public void onColourSelected(int colour) {
+        ConstraintLayout note = findViewById((R.id.main));
+        note.setBackgroundColor(colour);
+        this.colour = colour;
     }
 }

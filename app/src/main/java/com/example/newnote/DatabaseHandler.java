@@ -4,8 +4,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.sql.Timestamp;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -25,7 +28,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Add a note
-    public boolean newNote(String title, String subtitle, String body, String colour, int created){
+    public boolean newNote(String title, String subtitle, String body, int colour, long created){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("title",title);
@@ -34,6 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put("colour", colour);
         values.put("created", created);
         long result = db.insert("notes",null, values);
+        Log.d("DatabaseHandler", "Insert result: " + result);
         db.close();
         return result != -1;
     }

@@ -4,6 +4,11 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+<!--    <style name="Note.Palette.Option1">-->
+<!--        <item name="colorOnBackground">@color/option_1</item>-->
+<!--        <item name="colorPrimary">@color/option_1</item>-->
+<!--        <item name="colorAccent">@color/option_1_accent</item>-->
+<!--    </style>-->
 
     <style name="Theme.NewNote" parent="Base.Theme.NewNote" />
 </resources>

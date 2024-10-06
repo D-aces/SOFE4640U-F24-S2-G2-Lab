@@ -3,7 +3,10 @@ package com.example.newnote;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.SearchView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -51,6 +54,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SearchView searchNote = findViewById(R.id.searchNote);
+        searchNote.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                dbHandler.searchNotes(s);
+                // TODO: Add update to NoteAdapter here
+                return false;
+            }
+        });
+
+
         // Handle window insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -72,8 +91,9 @@ public class MainActivity extends AppCompatActivity {
                 String title = cursor.getString(1);
                 String subtitle = cursor.getString(2);
                 String body = cursor.getString(3);
-                Date created = new Date (cursor.getInt(4));
-                notes.add(new Note(id, title, subtitle, body, created));
+                int colour = cursor.getInt(4);
+                Date created = new Date (cursor.getLong(5));
+                notes.add(new Note(id, title, subtitle, body, colour, created));
             } while (cursor.moveToNext());
         }
         cursor.close();

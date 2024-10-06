@@ -1,6 +1,6 @@
 package com.example.newnote;
 
 public interface ColourSelectionListener {
-    void onColourSelected(int color);
+    void onColourSelected(int colour);
 }
 
