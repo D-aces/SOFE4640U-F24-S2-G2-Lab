@@ -9,4 +9,9 @@
     <color name="option_3">#6fba59</color>
     <color name="option_4">#4eb6ac</color>
     <color name="option_5">#eed958</color>
+    <color name="option_1_accent">#CC334D</color>
+    <color name="option_2_accent">#4a89a0</color>
+    <color name="option_3_accent">#4b823e</color>
+    <color name="option_4_accent">#377f7d</color>
+    <color name="option_5_accent">#eec658</color>
 </resources>
