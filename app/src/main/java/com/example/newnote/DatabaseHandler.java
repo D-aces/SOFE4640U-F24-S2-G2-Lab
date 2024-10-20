@@ -8,8 +8,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.sql.Timestamp;
-
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     public DatabaseHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
