@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -43,7 +45,6 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add a text watcher to check if title is empty
                 TextInputEditText title = findViewById(R.id.title);
                 TextInputEditText subTitle = findViewById(R.id.subtitle);
                 TextInputEditText body = findViewById(R.id.body);
@@ -53,11 +54,16 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                 String bodyText = body.getText().toString();
                 long timeStamp = System.currentTimeMillis();
 
-                DatabaseHandler db = new DatabaseHandler(NewNote.this, null, null, 1);
-                db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
+                if(titleText.isBlank()){
+                    Toast.makeText(getApplicationContext(), "Please add a note title", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    DatabaseHandler db = new DatabaseHandler(NewNote.this, null, null, 1);
+                    db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
 
-                Intent i = new Intent(NewNote.this, MainActivity.class);
-                startActivity(i);
+                    Intent i = new Intent(NewNote.this, MainActivity.class);
+                    startActivity(i);
+                }
             }
         });
 
