@@ -63,6 +63,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
 
                     Intent i = new Intent(NewNote.this, MainActivity.class);
                     startActivity(i);
+                    //TODO: Add finish instead of start acitivity
                 }
             }
         });
