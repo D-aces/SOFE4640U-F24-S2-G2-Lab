@@ -61,9 +61,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                     DatabaseHandler db = new DatabaseHandler(NewNote.this, null, null, 1);
                     db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
 
-                    Intent i = new Intent(NewNote.this, MainActivity.class);
-                    startActivity(i);
-                    //TODO: Add finish instead of start acitivity
+                    finish();
                 }
             }
         });

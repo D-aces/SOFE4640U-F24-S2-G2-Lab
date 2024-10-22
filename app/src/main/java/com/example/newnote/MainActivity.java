@@ -20,7 +20,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHandler dbHandler;
-    private RecyclerView listNotes;
     private NoteAdapter notesAdapter;
     private List<Note> noteList;  // Current list of notes
 
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the DatabaseHandler and RecyclerView
         dbHandler = new DatabaseHandler(this, null, null, 1);
-        listNotes = findViewById(R.id.notes);
+        RecyclerView listNotes = findViewById(R.id.notes);
 
         // Set up RecyclerView
         listNotes.setLayoutManager(new LinearLayoutManager(this));
@@ -80,5 +79,24 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() { // on resume for returning to notes list
+        super.onResume();
+        SearchView searchNote = findViewById(R.id.searchNote);
+        String filter = searchNote.getQuery().toString();
+        if (filter.trim().isEmpty()) {
+            noteList = dbHandler.getAllNotes();
+        } else {
+            noteList = dbHandler.searchNotes(filter);
+        }
+        notesAdapter.updateNoteList(noteList); // update the list
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbHandler.close();
     }
 }
