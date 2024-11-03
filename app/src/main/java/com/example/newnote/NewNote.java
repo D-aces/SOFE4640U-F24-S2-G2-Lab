@@ -47,6 +47,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
             titleEditText.setText(editable.getTitle());
             subtitleEditText.setText(editable.getSubtitle());
             bodyEditText.setText(editable.getBody());
+            colour = editable.getColour();
             setBackgroundColour(editable.getColour());
         }
     }
