@@ -18,7 +18,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "notes.db";
 
-    public DatabaseHandler(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public DatabaseHandler(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -69,8 +69,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return notes;
     }
 
-    // Search for notes by id and return a Note Object
-    // TODO: Use this in the NewNote Activity to pass the note object
+    // For later
     public Note getNote(int noteId) {
         SQLiteDatabase db = this.getReadableDatabase();
         try (Cursor cursor = db.rawQuery("SELECT * FROM notes WHERE id = ?", new String[]{String.valueOf(noteId)})) {
@@ -87,6 +86,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
         }
         return null;
+    }
+
+    public boolean updateNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", note.getTitle());
+        contentValues.put("subtitle", note.getSubtitle());
+        contentValues.put("body", note.getBody());
+        contentValues.put("colour", note.getColour());
+
+        // Update the note based on its ID
+        int rowsAffected = db.update("notes", contentValues, "id = ?", new String[]{String.valueOf(note.getId())});
+        return rowsAffected > 0; // Returns true if at least one row was updated
     }
 
     // TODO: Use this in the NewNote Activity

@@ -63,6 +63,22 @@ public Note(int id, String title, String subtitle, String body, int colour, Date
 
     public Date getCreated(){return created; }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setColour(int colour) {
+        this.colour = colour;
+    }
+
     @Override
     public int describeContents() {
         return 0;

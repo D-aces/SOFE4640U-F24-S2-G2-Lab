@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
         setContentView(R.layout.activity_main);
 
         // Initialize the DatabaseHandler and RecyclerView
-        dbHandler = new DatabaseHandler(this, null, null, 1);
+        dbHandler = new DatabaseHandler(this);
         RecyclerView listNotes = findViewById(R.id.notes);
 
         // Set up RecyclerView
