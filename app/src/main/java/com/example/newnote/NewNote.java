@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class NewNote extends AppCompatActivity implements ColourSelectionListener {
     private int colour = -1;
     private Note editable;
+    private DatabaseHandler db;
     private TextInputEditText titleEditText;
     private TextInputEditText subtitleEditText;
     private TextInputEditText bodyEditText;
@@ -35,6 +36,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     }
 
     private void initializeViews() {
+        db = new DatabaseHandler(NewNote.this);
         titleEditText = findViewById(R.id.title);
         subtitleEditText = findViewById(R.id.subtitle);
         bodyEditText = findViewById(R.id.body);
@@ -56,6 +58,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         setupBackButton();
         setupColourPaletteButton();
         setupDoneButton();
+        setupDeleteButton();
     }
 
     private void setupBackButton() {
@@ -74,6 +77,15 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                 colourOptions.setColourSelectionListener(NewNote.this);
                 colourOptions.show(getSupportFragmentManager(), "ModalBottomSheet");
             }
+        });
+    }
+
+    private void setupDeleteButton(){
+        ImageButton delete = findViewById(R.id.delete);
+        delete.setOnClickListener(view -> {
+            db.deleteNote(editable.getId());
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
         });
     }
 
