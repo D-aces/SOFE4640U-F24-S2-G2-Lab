@@ -80,12 +80,15 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         });
     }
 
-    private void setupDeleteButton(){
+    private void setupDeleteButton() {
         ImageButton delete = findViewById(R.id.delete);
         delete.setOnClickListener(view -> {
-            db.deleteNote(editable.getId());
+            if (editable != null) {
+                db.deleteNote(editable.getId());
+            }
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
+            finish(); // Ensures NewNote activity is finished after deletion
         });
     }
 
@@ -95,25 +98,25 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     }
 
     private void saveNote() {
-        DatabaseHandler db = new DatabaseHandler(NewNote.this);
         String titleText = titleEditText.getText().toString();
         String subtitleText = subtitleEditText.getText().toString();
         String bodyText = bodyEditText.getText().toString();
+
         if (titleText.isBlank()) {
             Toast.makeText(getApplicationContext(), "Please add a note title", Toast.LENGTH_SHORT).show();
-        } else {
-            if(editable != null && db.getNote(editable.getId()) == null){
-                db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
-            }
-            else{
-                editable.setTitle(titleEditText.getText().toString());
-                editable.setSubtitle(subtitleEditText.getText().toString());
-                editable.setBody(bodyEditText.getText().toString());
-                editable.setColour(colour);
-                db.updateNote(editable);
-            }
-            finish();
+            return; // Early exit if title is blank
         }
+
+        if (editable == null) {
+            db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
+        } else {
+            editable.setTitle(titleText);
+            editable.setSubtitle(subtitleText);
+            editable.setBody(bodyText);
+            editable.setColour(colour);
+            db.updateNote(editable);
+        }
+        finish();
     }
 
     private void adjustWindowInsets() {
@@ -130,7 +133,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         this.colour = colour;
     }
 
-    public void setBackgroundColour(int colour){
+    public void setBackgroundColour(int colour) {
         ConstraintLayout noteLayout = findViewById(R.id.main);
         noteLayout.setBackgroundColor(colour);
     }
