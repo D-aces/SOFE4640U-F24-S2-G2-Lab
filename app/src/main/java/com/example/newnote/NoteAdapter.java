@@ -15,9 +15,10 @@ import java.util.Locale;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
     private List<Note> noteList;  // List to hold notes
-
-    public NoteAdapter(List<Note> noteList) {
+    private final RecyclerViewInterface recyclerViewInterface;
+    public NoteAdapter(List<Note> noteList, RecyclerViewInterface recyclerViewInterface) {
         this.noteList = noteList;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     // Method to update the list of notes and refresh the RecyclerView
@@ -30,7 +31,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_item, parent, false);
-        return new NoteViewHolder(view);
+        return new NoteViewHolder(view, recyclerViewInterface);
     }
 
     @Override
@@ -63,13 +64,26 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         LinearLayout noteCard;
         TextView title, subtitle, body, created;
 
-        public NoteViewHolder(@NonNull View itemView) {
+        public NoteViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             noteCard = itemView.findViewById(R.id.noteCard);
             title = itemView.findViewById(R.id.noteTitle);
             subtitle = itemView.findViewById(R.id.noteSubtitle);
             body = itemView.findViewById(R.id.noteBody);
             created = itemView.findViewById(R.id.noteCreated);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(recyclerViewInterface != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(position);
+                        }
+                    }
+                }
+            });
+
         }
     }
 }

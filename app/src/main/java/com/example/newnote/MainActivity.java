@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewInterface {
 
     private DatabaseHandler dbHandler;
     private NoteAdapter notesAdapter;
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Load all notes from the database initially
         noteList = dbHandler.getAllNotes();
-        notesAdapter = new NoteAdapter(noteList);
+        notesAdapter = new NoteAdapter(noteList, this);
         listNotes.setAdapter(notesAdapter);
 
         // Set up Floating Action Button to add a new note
@@ -98,5 +98,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         dbHandler.close();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(this, NewNote.class);
+        intent.putExtra("Note", noteList.get(position));
+        startActivity(intent);
     }
 }

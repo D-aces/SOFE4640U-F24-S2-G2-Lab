@@ -1,7 +1,12 @@
 package com.example.newnote;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 
-public class Note {
+public class Note implements Parcelable {
     private int id;
     private String title;
     private String subtitle;
@@ -17,6 +22,26 @@ public Note(int id, String title, String subtitle, String body, int colour, Date
     this.colour = colour;
     this.created = created;
 }
+
+    protected Note(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        subtitle = in.readString();
+        body = in.readString();
+        colour = in.readInt();
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
 
     public int getId(){
     return id;
@@ -38,4 +63,17 @@ public Note(int id, String title, String subtitle, String body, int colour, Date
 
     public Date getCreated(){return created; }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(title);
+        parcel.writeString(subtitle);
+        parcel.writeString(body);
+        parcel.writeInt(colour);
+    }
 }
