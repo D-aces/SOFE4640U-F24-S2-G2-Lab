@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewInter
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(this, NewNote.class);
-        intent.putExtra("Note", noteList.get(position));
+        intent.putExtra("NOTE", noteList.get(position));
         startActivity(intent);
     }
 }
