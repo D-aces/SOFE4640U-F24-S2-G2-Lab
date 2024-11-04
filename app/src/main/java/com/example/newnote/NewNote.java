@@ -160,9 +160,13 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     }
 
     private void displaySelectedImage(Uri uri) {
+        if (internalImagePath != null) {
+            deleteExistingPhoto(internalImagePath);
+        }
         imagePreview.setImageURI(uri);
         imagePreview.setAdjustViewBounds(true);
         imagePreviewWrapper.setVisibility(View.VISIBLE);
+        photoUri = uri;
     }
 
     private void copyFileToInternalStorage(Uri sourceUri, String fileName) {
@@ -271,22 +275,17 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
             return;
         }
 
-        // Check if this is a new note and a photo has been selected
-        if (isNewNote && photoUri != null) {
-            copyFileToInternalStorage(photoUri, generateUniqueFileName(photoUri));
-        }
-
-        // Check if this is a note edit and a photo has been selected
-        if (!isNewNote && photoUri != null) {
-            // Checks if there is an existing photo and deletes it to free up space
-            if (editable.getPhotopath() != null) {
-                deleteExistingPhoto(editable.getPhotopath());
+        // Check if a photo has been selected
+        if (photoUri != null) {
+            // Delete existing photo if there's an existing internal path
+            if (internalImagePath != null) {
+                deleteExistingPhoto(internalImagePath);
             }
-            // Write a new photo
+            // Copy the new photo to internal storage
             copyFileToInternalStorage(photoUri, generateUniqueFileName(photoUri));
         }
 
-        // Check if this is a new note and creates or updates record in database
+        // Create a new note or update an existing note in the database
         if (isNewNote) {
             db.newNote(titleText, subtitleText, bodyText, colour, timeStamp, internalImagePath);
         } else {
