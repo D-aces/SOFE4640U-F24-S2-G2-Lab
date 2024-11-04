@@ -1,13 +1,14 @@
 package com.example.newnote;
 
 import android.content.Intent;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,6 +27,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class NewNote extends AppCompatActivity implements ColourSelectionListener {
     private int colour = -1;
@@ -40,6 +44,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private ActivityResultLauncher<Uri> takePhoto;
     private Uri photoUri;
+    private String internalImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
             // Callback after user selects a media item or closes the photo picker
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: " + uri);
+                photoUri = uri;
                 displaySelectedImage(uri);
             } else {
                 Log.d("PhotoPicker", "No media selected");
@@ -89,6 +95,13 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
             bodyEditText.setText(editable.getBody());
             colour = editable.getColour();
             setBackgroundColour(editable.getColour());
+            if (editable.getPhotopath() != null) {
+                Bitmap photo = loadImageFromInternalStorage(editable.getPhotopath());
+                if (photo != null) {
+                    imagePreview.setImageBitmap(photo);
+                    imagePreview.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -147,6 +160,84 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         imagePreview.setVisibility(View.VISIBLE);
     }
 
+    private void copyFileToInternalStorage(Uri sourceUri, String fileName) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+
+        try {
+            inputStream = getContentResolver().openInputStream(sourceUri);
+            File internalFile = new File(getFilesDir(), fileName);
+            outputStream = new FileOutputStream(internalFile);
+
+            long fileSize = inputStream.available();
+            int bufferSize = (int) Math.min(fileSize, 8 * 1024);
+            byte[] buffer = new byte[bufferSize];
+
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            internalImagePath = internalFile.getAbsolutePath();
+
+            Toast.makeText(this, "Image saved to internal storage", Toast.LENGTH_SHORT).show();
+
+        } catch (IOException e) {
+            Log.e("CopyFile", "Error copying file", e);
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                Log.e("CopyFile", "Error closing streams", e);
+            }
+        }
+    }
+
+    private Bitmap loadImageFromInternalStorage(String filePath) {
+        File imageFile = new File(filePath);
+        if (imageFile.exists()) {
+            return BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+        }
+        return null;
+    }
+
+
+    private void deleteExistingPhoto(String filePath) {
+        File existingFile = new File(filePath);
+        if (existingFile.exists()) {
+            boolean deleted = existingFile.delete();
+            if (!deleted) {
+                Log.e("DeletePhoto", "Failed to delete existing photo: " + filePath);
+            }
+        }
+    }
+
+    private String generateUniqueFileName(Uri uri) {
+        long timestamp = System.currentTimeMillis();
+        return "image_" + timestamp + getFileExtension(uri);
+    }
+
+    private String getFileExtension(Uri uri) {
+        String extension = null;
+        if (uri.getScheme().equals("content")) {
+            String mimeType = getContentResolver().getType(uri);
+            if (mimeType != null) {
+                extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+            }
+        } else {
+            String filePath = uri.getPath();
+            if (filePath != null) {
+                extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(filePath)).toString());
+            }
+        }
+        return extension != null ? extension : "jpg";
+    }
+
     private void setupDeleteButton() {
         ImageButton delete = findViewById(R.id.delete);
         delete.setOnClickListener(view -> {
@@ -168,19 +259,37 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         String titleText = titleEditText.getText().toString();
         String subtitleText = subtitleEditText.getText().toString();
         String bodyText = bodyEditText.getText().toString();
+        boolean isNewNote = editable == null;
 
         if (titleText.isBlank()) {
             Toast.makeText(getApplicationContext(), "Please add a note title", Toast.LENGTH_SHORT).show();
-            return; // Early exit if title is blank
+            return;
         }
 
-        if (editable == null) {
-            db.newNote(titleText, subtitleText, bodyText, colour, timeStamp);
+        // Check if this is a new note and a photo has been selected
+        if (isNewNote && photoUri != null) {
+            copyFileToInternalStorage(photoUri, generateUniqueFileName(photoUri));
+        }
+
+        // Check if this is a note edit and a photo has been selected
+        if (!isNewNote && photoUri != null) {
+            // Checks if there is an existing photo and deletes it to free up space
+            if (editable.getPhotopath() != null) {
+                deleteExistingPhoto(editable.getPhotopath());
+            }
+            // Write a new photo
+            copyFileToInternalStorage(photoUri, generateUniqueFileName(photoUri));
+        }
+
+        // Check if this is a new note and creates or updates record in database
+        if (isNewNote) {
+            db.newNote(titleText, subtitleText, bodyText, colour, timeStamp, internalImagePath);
         } else {
             editable.setTitle(titleText);
             editable.setSubtitle(subtitleText);
             editable.setBody(bodyText);
             editable.setColour(colour);
+            editable.setPhotopath(internalImagePath);
             db.updateNote(editable);
         }
         finish();

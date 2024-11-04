@@ -1,4 +1,5 @@
 package com.example.newnote;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,15 +14,17 @@ public class Note implements Parcelable {
     private String body;
     private int colour;
     private Date created;
+    private String photopath;
 
-public Note(int id, String title, String subtitle, String body, int colour, Date created){
-    this.id = id;
-    this.title = title;
-    this.subtitle = subtitle;
-    this.body = body;
-    this.colour = colour;
-    this.created = created;
-}
+    public Note(int id, String title, String subtitle, String body, int colour, Date created, String photopath) {
+        this.id = id;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.body = body;
+        this.colour = colour;
+        this.created = created;
+        this.photopath = photopath;
+    }
 
     protected Note(Parcel in) {
         id = in.readInt();
@@ -29,6 +32,7 @@ public Note(int id, String title, String subtitle, String body, int colour, Date
         subtitle = in.readString();
         body = in.readString();
         colour = in.readInt();
+        photopath = in.readString();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -43,25 +47,33 @@ public Note(int id, String title, String subtitle, String body, int colour, Date
         }
     };
 
-    public int getId(){
-    return id;
+    public int getId() {
+        return id;
     }
 
-    public String getTitle(){
-    return title;
+    public String getTitle() {
+        return title;
     }
 
-    public String getSubtitle(){
+    public String getSubtitle() {
         return subtitle;
     }
 
-    public String getBody(){
-    return body;
+    public String getBody() {
+        return body;
     }
 
-    public int getColour(){return colour;}
+    public int getColour() {
+        return colour;
+    }
 
-    public Date getCreated(){return created; }
+    public Date getCreated() {
+        return created;
+    }
+
+    public String getPhotopath(){
+        return photopath;
+    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -77,6 +89,10 @@ public Note(int id, String title, String subtitle, String body, int colour, Date
 
     public void setColour(int colour) {
         this.colour = colour;
+    }
+
+    public void setPhotopath(String photopath){
+        this.photopath = photopath;
     }
 
     @Override

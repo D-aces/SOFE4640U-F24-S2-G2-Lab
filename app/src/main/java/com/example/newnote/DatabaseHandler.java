@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "notes.db";
 
     public DatabaseHandler(@Nullable Context context) {
@@ -29,12 +29,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        // Handle upgrades if necessary
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if(oldVersion < 3) {
+            String alterTableStatement = "ALTER TABLE notes ADD COLUMN photopath TEXT";
+            db.execSQL(alterTableStatement);
+        }
     }
 
     // Add a new note to the database
-    public boolean newNote(String title, String subtitle, String body, int colour, long created) {
+    public boolean newNote(String title, String subtitle, String body, int colour, long created, String photopath) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("title", title);
@@ -42,6 +45,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put("body", body);
         values.put("colour", colour);
         values.put("created", created);
+        values.put("photopath", photopath);
         long result = db.insert("notes", null, values);
         Log.d("DatabaseHandler", "Insert result: " + result);
         db.close();
@@ -62,7 +66,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 String body = cursor.getString(3);
                 int colour = cursor.getInt(4);
                 long created = cursor.getLong(5);
-                notes.add(new Note(id, title, subtitle, body, colour, new Date(created)));
+                String photopath = cursor.getString(6);
+                notes.add(new Note(id, title, subtitle, body, colour, new Date(created), photopath));
             } while (cursor.moveToNext());
         }
         cursor.close();  // Always close the cursor
@@ -80,7 +85,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 String body = cursor.getString(3);
                 int colour = cursor.getInt(4);
                 long created = cursor.getLong(5);
-                Note note = new Note(id, title, subtitle, body, colour, new Date(created));
+                String photopath = cursor.getString(6);
+                Note note = new Note(id, title, subtitle, body, colour, new Date(created), photopath);
                 cursor.close();
                 return note;
             }
@@ -95,6 +101,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put("subtitle", note.getSubtitle());
         contentValues.put("body", note.getBody());
         contentValues.put("colour", note.getColour());
+        contentValues.put("photopath", note.getPhotopath());
 
         // Update the note based on its ID
         int rowsAffected = db.update("notes", contentValues, "id = ?", new String[]{String.valueOf(note.getId())});
@@ -121,10 +128,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 String body = cursor.getString(3);
                 int colour = cursor.getInt(4);
                 long created = cursor.getLong(5);
-                notes.add(new Note(id, title, subtitle, body, colour, new Date(created)));
+                String photopath = cursor.getString(6);
+                notes.add(new Note(id, title, subtitle, body, colour, new Date(created), photopath));
             } while (cursor.moveToNext());
         }
-        cursor.close();  // Always close the cursor
+        cursor.close();
         return notes;
     }
 }
