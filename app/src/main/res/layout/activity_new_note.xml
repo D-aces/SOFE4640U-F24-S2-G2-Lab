@@ -33,23 +33,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
             android:layout_marginRight="24dp"
+            android:orientation="horizontal"
             tools:layout_editor_absoluteX="142dp"
             tools:layout_editor_absoluteY="31dp">
+
             <ImageButton
                 android:id="@+id/colourPalette"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:alpha="128"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_palette_24"
@@ -59,18 +59,18 @@
                 android:id="@+id/imagePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginEnd="20dp"
                 app:srcCompat="@drawable/baseline_image_24" />
 
             <ImageButton
                 android:id="@+id/cameraSelect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginEnd="20dp"
                 app:srcCompat="@drawable/baseline_photo_camera_24" />
 
             <ImageButton
@@ -85,8 +85,8 @@
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-
     <Button
+        style="@style/Button.Black"
         android:id="@+id/donebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -170,6 +170,7 @@
 
             <ImageView
                 android:id="@+id/imagePreview"
+                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"

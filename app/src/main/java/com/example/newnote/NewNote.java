@@ -1,18 +1,32 @@
 package com.example.newnote;
 
 import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.File;
 
 public class NewNote extends AppCompatActivity implements ColourSelectionListener {
     private int colour = -1;
@@ -22,12 +36,35 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     private TextInputEditText subtitleEditText;
     private TextInputEditText bodyEditText;
     private long timeStamp;
+    private ImageView imagePreview;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private ActivityResultLauncher<Uri> takePhoto;
+    private Uri photoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_new_note);
+
+        pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+            // Callback after user selects a media item or closes the photo picker
+            if (uri != null) {
+                Log.d("PhotoPicker", "Selected URI: " + uri);
+                displaySelectedImage(uri);
+            } else {
+                Log.d("PhotoPicker", "No media selected");
+            }
+        });
+
+        takePhoto = registerForActivityResult(new ActivityResultContracts.TakePicture(), isSuccess -> {
+            if (isSuccess) {
+                Log.d("Camera", "Photo taken successfully: " + photoUri);
+                displaySelectedImage(photoUri); // Display the taken photo
+            } else {
+                Log.d("Camera", "Photo was not taken");
+            }
+        });
 
         initializeViews();
         loadExistingNote();
@@ -42,6 +79,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         bodyEditText = findViewById(R.id.body);
         timeStamp = System.currentTimeMillis();
         editable = getIntent().getParcelableExtra("NOTE");
+        imagePreview = findViewById(R.id.imagePreview);
     }
 
     private void loadExistingNote() {
@@ -60,6 +98,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         setupImagePickerButton();
         setupDeleteButton();
         setupDoneButton();
+        setupCameraButton();
     }
 
     private void setupBackButton() {
@@ -81,12 +120,33 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         });
     }
 
-    private void setupImagePickerButton(){
+    private void setupImagePickerButton() {
         ImageButton imagePickerButton = findViewById(R.id.imagePicker);
-        imagePickerButton.setOnClickListener(v ->{
-            Intent gallleryEvent = new Intent();
+        imagePickerButton.setOnClickListener(v -> {
+            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
     }
+
+    private void setupCameraButton() {
+        ImageButton cameraButton = findViewById(R.id.cameraSelect);
+        cameraButton.setOnClickListener(v -> {
+            // Create a file to save the photo
+            File photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "photo.jpg");
+            photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", photoFile);
+
+            // Launch the camera
+            takePhoto.launch(photoUri);
+        });
+    }
+
+    private void displaySelectedImage(Uri uri) {
+        imagePreview.setImageURI(uri);
+        imagePreview.setAdjustViewBounds(true);
+        imagePreview.setVisibility(View.VISIBLE);
+    }
+
     private void setupDeleteButton() {
         ImageButton delete = findViewById(R.id.delete);
         delete.setOnClickListener(view -> {
@@ -143,9 +203,5 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     public void setBackgroundColour(int colour) {
         ConstraintLayout noteLayout = findViewById(R.id.main);
         noteLayout.setBackgroundColor(colour);
-    }
-
-    public void onSelectImage(){
-
     }
 }
