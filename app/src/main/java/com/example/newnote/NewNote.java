@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -41,6 +42,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     private TextInputEditText bodyEditText;
     private long timeStamp;
     private ImageView imagePreview;
+    private FrameLayout imagePreviewWrapper;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private ActivityResultLauncher<Uri> takePhoto;
     private Uri photoUri;
@@ -86,6 +88,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         timeStamp = System.currentTimeMillis();
         editable = getIntent().getParcelableExtra("NOTE");
         imagePreview = findViewById(R.id.imagePreview);
+        imagePreviewWrapper = findViewById(R.id.imagePreviewWrapper);
     }
 
     private void loadExistingNote() {
@@ -99,7 +102,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                 Bitmap photo = loadImageFromInternalStorage(editable.getPhotopath());
                 if (photo != null) {
                     imagePreview.setImageBitmap(photo);
-                    imagePreview.setVisibility(View.VISIBLE);
+                    imagePreviewWrapper.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -157,7 +160,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     private void displaySelectedImage(Uri uri) {
         imagePreview.setImageURI(uri);
         imagePreview.setAdjustViewBounds(true);
-        imagePreview.setVisibility(View.VISIBLE);
+        imagePreviewWrapper.setVisibility(View.VISIBLE);
     }
 
     private void copyFileToInternalStorage(Uri sourceUri, String fileName) {
