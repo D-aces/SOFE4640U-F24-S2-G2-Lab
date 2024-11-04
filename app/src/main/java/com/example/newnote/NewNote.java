@@ -134,7 +134,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         cameraButton.setOnClickListener(v -> {
             // Create a file to save the photo
             File photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "photo.jpg");
-            photoUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", photoFile);
+            photoUri = FileProvider.getUriForFile(this, "com.example.newnote" + ".provider", photoFile);
 
             // Launch the camera
             takePhoto.launch(photoUri);
