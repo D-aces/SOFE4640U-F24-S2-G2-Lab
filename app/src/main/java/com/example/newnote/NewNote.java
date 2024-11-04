@@ -98,6 +98,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
             bodyEditText.setText(editable.getBody());
             colour = editable.getColour();
             setBackgroundColour(editable.getColour());
+            System.out.println(editable.getPhotopath());
             if (editable.getPhotopath() != null) {
                 Bitmap photo = loadImageFromInternalStorage(editable.getPhotopath());
                 if (photo != null) {
@@ -238,7 +239,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                 extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(filePath)).toString());
             }
         }
-        return extension != null ? extension : "jpg";
+        return extension != null ? extension : ".jpg";
     }
 
     private void setupDeleteButton() {

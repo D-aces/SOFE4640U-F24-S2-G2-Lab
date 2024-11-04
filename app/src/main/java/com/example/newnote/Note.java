@@ -107,5 +107,6 @@ public class Note implements Parcelable {
         parcel.writeString(subtitle);
         parcel.writeString(body);
         parcel.writeInt(colour);
+        parcel.writeString(photopath);
     }
 }
