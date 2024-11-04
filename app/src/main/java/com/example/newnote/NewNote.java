@@ -103,6 +103,7 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
                 Bitmap photo = loadImageFromInternalStorage(editable.getPhotopath());
                 if (photo != null) {
                     imagePreview.setImageBitmap(photo);
+                    imagePreview.setAdjustViewBounds(true);
                     imagePreviewWrapper.setVisibility(View.VISIBLE);
                 }
             }
