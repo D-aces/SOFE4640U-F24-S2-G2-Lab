@@ -48,18 +48,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:alpha="128"
-                android:background="#00FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_palette_24"
                 app:tint="@color/black" />
 
             <ImageButton
+                android:id="@+id/imagePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginEnd="20dp"
+                app:srcCompat="@drawable/baseline_image_24" />
+
+            <ImageButton
+                android:id="@+id/cameraSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginEnd="20dp"
+                app:srcCompat="@drawable/baseline_photo_camera_24" />
+
+            <ImageButton
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#00FFFFFF"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/baseline_delete_outline_24"
                 tools:layout_editor_absoluteX="304dp"
                 tools:layout_editor_absoluteY="11dp" />
@@ -83,7 +101,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/donebutton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -149,6 +167,13 @@
                     android:scrollbars="vertical"
                     android:textDirection="inherit" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/imagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:srcCompat="@drawable/baseline_image_100" />
 
         </LinearLayout>
     </ScrollView>

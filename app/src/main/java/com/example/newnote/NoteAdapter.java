@@ -47,6 +47,19 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         holder.subtitle.setTextColor(accentColour);
         holder.body.setText(note.getBody());
         holder.body.setTextColor(accentColour);
+        if(note.getSubtitle().isEmpty()){
+            holder.subtitle.setVisibility(View.GONE) ;
+        }
+        else{
+            holder.subtitle.setVisibility(View.VISIBLE) ;
+        }
+        if(note.getBody().isEmpty()){
+            holder.body.setVisibility(View.GONE);
+        }
+        else {
+            holder.body.setVisibility(View.VISIBLE);
+        }
+
         holder.noteCard.setBackgroundColor(note.getColour());
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());

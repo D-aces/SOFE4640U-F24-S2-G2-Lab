@@ -57,8 +57,9 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     private void setupListeners() {
         setupBackButton();
         setupColourPaletteButton();
-        setupDoneButton();
+        setupImagePickerButton();
         setupDeleteButton();
+        setupDoneButton();
     }
 
     private void setupBackButton() {
@@ -80,6 +81,12 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
         });
     }
 
+    private void setupImagePickerButton(){
+        ImageButton imagePickerButton = findViewById(R.id.imagePicker);
+        imagePickerButton.setOnClickListener(v ->{
+            Intent gallleryEvent = new Intent();
+        });
+    }
     private void setupDeleteButton() {
         ImageButton delete = findViewById(R.id.delete);
         delete.setOnClickListener(view -> {
@@ -136,5 +143,9 @@ public class NewNote extends AppCompatActivity implements ColourSelectionListene
     public void setBackgroundColour(int colour) {
         ConstraintLayout noteLayout = findViewById(R.id.main);
         noteLayout.setBackgroundColor(colour);
+    }
+
+    public void onSelectImage(){
+
     }
 }
