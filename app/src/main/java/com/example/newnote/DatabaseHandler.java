@@ -108,7 +108,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return rowsAffected > 0; // Returns true if at least one row was updated
     }
 
-    // TODO: Use this in the NewNote Activity
+
     public boolean deleteNote(int noteId){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.delete("notes", "id = ?", new String[]{String.valueOf(noteId)}) > 0;
